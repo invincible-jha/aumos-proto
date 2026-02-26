@@ -1,0 +1,28 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+message GovernanceDecisionEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string policy_id = 3;
+  string policy_name = 4;
+  string resource_type = 5;
+  string resource_id = 6;
+  GovernanceDecision decision = 7;
+  repeated string violations = 8;
+  string decided_by = 9;
+  google.protobuf.Struct evidence = 10;
+  google.protobuf.Timestamp timestamp = 11;
+}
+
+enum GovernanceDecision {
+  GOVERNANCE_DECISION_UNSPECIFIED = 0;
+  APPROVED = 1;
+  DENIED = 2;
+  ESCALATED = 3;
+  PENDING_REVIEW = 4;
+  AUTO_APPROVED = 5;
+}

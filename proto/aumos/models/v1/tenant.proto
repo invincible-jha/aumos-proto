@@ -1,0 +1,32 @@
+syntax = "proto3";
+package aumos.models.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Tenant {
+  string id = 1;
+  string name = 2;
+  string display_name = 3;
+  TenantStatus status = 4;
+  string tier = 5;
+  string k8s_namespace = 6;
+  TenantQuota quota = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+enum TenantStatus {
+  TENANT_STATUS_UNSPECIFIED = 0;
+  PROVISIONING = 1;
+  ACTIVE = 2;
+  SUSPENDED = 3;
+  DECOMMISSIONED = 4;
+}
+
+message TenantQuota {
+  int32 cpu_cores = 1;
+  int32 memory_gb = 2;
+  int32 gpu_count = 3;
+  int32 storage_gb = 4;
+  int32 max_models = 5;
+}

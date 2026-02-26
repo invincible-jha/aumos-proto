@@ -1,0 +1,21 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+message AuditEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string user_id = 3;
+  string action = 4;           // create, read, update, delete, approve, deny
+  string resource_type = 5;    // model, dataset, policy, agent, workflow
+  string resource_id = 6;
+  string outcome = 7;          // success, failure, denied
+  google.protobuf.Struct details = 8;
+  string source_service = 9;
+  string ip_address = 10;
+  google.protobuf.Timestamp timestamp = 11;
+  string request_id = 12;
+  string session_id = 13;
+}

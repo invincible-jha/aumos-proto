@@ -1,0 +1,1 @@
+"""AumOS event type stubs."""

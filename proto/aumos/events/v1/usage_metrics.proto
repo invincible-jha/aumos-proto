@@ -1,0 +1,15 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message UsageMetricsEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string service_name = 3;
+  string metric_type = 4;     // api_call, token_usage, gpu_seconds, storage_bytes
+  double value = 5;
+  string unit = 6;
+  map<string, string> labels = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}

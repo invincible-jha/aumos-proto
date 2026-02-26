@@ -1,0 +1,9 @@
+version: v1
+name: aumos/aumos-proto
+deps: []
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT

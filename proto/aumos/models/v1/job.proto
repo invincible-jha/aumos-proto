@@ -1,0 +1,29 @@
+syntax = "proto3";
+package aumos.models.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+message Job {
+  string id = 1;
+  string tenant_id = 2;
+  string job_type = 3;
+  JobStatus status = 4;
+  google.protobuf.Struct input_params = 5;
+  google.protobuf.Struct output = 6;
+  string created_by = 7;
+  float progress_percent = 8;
+  string error_message = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp started_at = 11;
+  google.protobuf.Timestamp completed_at = 12;
+}
+
+enum JobStatus {
+  JOB_STATUS_UNSPECIFIED = 0;
+  PENDING = 1;
+  RUNNING = 2;
+  COMPLETED = 3;
+  FAILED = 4;
+  CANCELLED = 5;
+}

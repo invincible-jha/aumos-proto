@@ -1,0 +1,18 @@
+syntax = "proto3";
+package aumos.api.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message HealthResponse {
+  string service = 1;
+  string status = 2;
+  string version = 3;
+  map<string, ComponentHealth> components = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+message ComponentHealth {
+  string status = 1;
+  string message = 2;
+  double latency_ms = 3;
+}

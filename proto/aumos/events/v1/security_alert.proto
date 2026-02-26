@@ -1,0 +1,28 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+message SecurityAlertEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  AlertSeverity severity = 3;
+  string alert_type = 4;
+  string source_service = 5;
+  string description = 6;
+  google.protobuf.Struct details = 7;
+  repeated string affected_resources = 8;
+  string mitigation_action = 9;
+  bool auto_mitigated = 10;
+  google.protobuf.Timestamp timestamp = 11;
+}
+
+enum AlertSeverity {
+  ALERT_SEVERITY_UNSPECIFIED = 0;
+  INFO = 1;
+  LOW = 2;
+  MEDIUM = 3;
+  HIGH = 4;
+  CRITICAL = 5;
+}

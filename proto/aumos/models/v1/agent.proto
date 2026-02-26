@@ -1,0 +1,34 @@
+syntax = "proto3";
+package aumos.models.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Agent {
+  string id = 1;
+  string tenant_id = 2;
+  string name = 3;
+  string description = 4;
+  AgentType agent_type = 5;
+  int32 privilege_level = 6;
+  AgentStatus status = 7;
+  repeated string capabilities = 8;
+  string owner_id = 9;
+  google.protobuf.Timestamp created_at = 10;
+}
+
+enum AgentType {
+  AGENT_TYPE_UNSPECIFIED = 0;
+  AUTONOMOUS = 1;
+  SEMI_AUTONOMOUS = 2;
+  SUPERVISED = 3;
+  TOOL = 4;
+}
+
+enum AgentStatus {
+  AGENT_STATUS_UNSPECIFIED = 0;
+  IDLE = 1;
+  RUNNING = 2;
+  PAUSED = 3;
+  ERROR = 4;
+  TERMINATED = 5;
+}

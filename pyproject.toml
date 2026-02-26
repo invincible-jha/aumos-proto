@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aumos-proto"
+version = "0.1.0"
+description = "Protobuf schemas and compiled stubs for AumOS Enterprise platform events"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+authors = [{ name = "AumOS Enterprise" }]
+dependencies = [
+    "protobuf>=4.25.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "mypy>=1.8.0",
+    "ruff>=0.3.0",
+    "grpcio-tools>=1.60.0",
+    "mypy-protobuf>=3.5.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aumos_proto"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "UP", "B", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+exclude = ["tests/"]

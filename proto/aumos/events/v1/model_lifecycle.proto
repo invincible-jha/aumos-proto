@@ -1,0 +1,30 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+message ModelLifecycleEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string model_id = 3;
+  string model_name = 4;
+  string version = 5;
+  ModelLifecycleAction action = 6;
+  string triggered_by = 7;
+  google.protobuf.Struct metadata = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+enum ModelLifecycleAction {
+  MODEL_LIFECYCLE_ACTION_UNSPECIFIED = 0;
+  MODEL_REGISTERED = 1;
+  MODEL_TRAINING_STARTED = 2;
+  MODEL_TRAINING_COMPLETED = 3;
+  MODEL_VALIDATION_PASSED = 4;
+  MODEL_VALIDATION_FAILED = 5;
+  MODEL_DEPLOYED = 6;
+  MODEL_UNDEPLOYED = 7;
+  MODEL_ARCHIVED = 8;
+  MODEL_DELETED = 9;
+}
