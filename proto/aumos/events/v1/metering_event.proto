@@ -1,0 +1,48 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+message MeteringEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string project_id = 3;
+  string team_id = 4;
+  string service_name = 5;
+  string operation = 6;
+  int64 timestamp_ms = 7;
+
+  oneof resource {
+    TokenUsage token_usage = 8;
+    InferenceUsage inference_usage = 9;
+    StorageUsage storage_usage = 10;
+    SyntheticDataUsage synthetic_usage = 11;
+  }
+
+  map<string, string> labels = 12;
+}
+
+message TokenUsage {
+  string model_id = 1;
+  string provider = 2;
+  int64 input_tokens = 3;
+  int64 output_tokens = 4;
+  double estimated_cost_usd = 5;
+}
+
+message InferenceUsage {
+  string model_id = 1;
+  float latency_ms = 2;
+  int64 compute_ms = 3;
+  string hardware_tier = 4;
+}
+
+message StorageUsage {
+  int64 bytes_read = 1;
+  int64 bytes_written = 2;
+  string storage_tier = 3;
+}
+
+message SyntheticDataUsage {
+  int64 records_generated = 1;
+  string data_modality = 2;
+  float generation_duration_ms = 3;
+}
