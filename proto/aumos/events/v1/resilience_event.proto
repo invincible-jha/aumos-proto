@@ -1,0 +1,45 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+option python_package = "aumos_proto.events.v1";
+
+import "google/protobuf/timestamp.proto";
+
+// CircuitBreakerEvent records state transitions in a circuit breaker.
+message CircuitBreakerEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string circuit_name = 3;
+  string from_state = 4;   // closed, open, half_open
+  string to_state = 5;
+  string source_service = 6;
+  int32 failure_count = 7;
+  int32 success_count = 8;
+  string trigger_reason = 9;
+  google.protobuf.Timestamp timestamp = 10;
+}
+
+// RateLimitEvent records when a rate limit threshold is crossed.
+message RateLimitEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string path = 3;
+  int32 limit = 4;
+  int32 current_count = 5;
+  bool rejected = 6;
+  string source_service = 7;
+  string client_id = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+// BulkheadEvent records when a bulkhead (concurrency limiter) rejects a call.
+message BulkheadEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string bulkhead_name = 3;
+  int32 max_concurrent_calls = 4;
+  int32 active_calls = 5;
+  bool rejected = 6;
+  string source_service = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}

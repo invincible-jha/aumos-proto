@@ -1,0 +1,82 @@
+name: Proto Schema Validation
+
+# Runs on every PR that touches proto files, buf config, or generation config.
+# This workflow enforces two gates:
+#   1. buf lint  — naming conventions and style (Gap 538)
+#   2. buf breaking — wire-compatible schema evolution (Gap 536)
+on:
+  pull_request:
+    paths:
+      - 'proto/**'
+      - 'buf.yaml'
+      - 'buf.gen.yaml'
+      - 'buf.lock'
+  push:
+    branches:
+      - main
+    paths:
+      - 'proto/**'
+      - 'buf.yaml'
+
+jobs:
+  buf-lint:
+    name: buf lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: bufbuild/buf-action@v1
+        with:
+          input: proto
+          lint: true
+          # Fail the PR if any proto file violates buf DEFAULT lint rules.
+          # Common violations: non-snake_case field names, missing package declarations,
+          # enum values without UNSPECIFIED = 0.
+
+  buf-breaking:
+    name: buf breaking change detection
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history required to compare current branch against main.
+          fetch-depth: 0
+
+      - uses: bufbuild/buf-action@v1
+        with:
+          input: proto
+          breaking: true
+          # Compare against the published main branch in the remote.
+          # FILE-level rules detect: field removal, field renumbering,
+          # type changes, enum value removal.
+          breaking_against: 'https://github.com/muveraai/aumos-proto.git#branch=main,subdir=proto'
+
+  check-generated:
+    name: Generated stubs are committed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install buf
+        uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install betterproto compiler
+        run: pip install "betterproto[compiler]>=0.9.0" grpcio-tools mypy-protobuf
+
+      - name: Regenerate stubs
+        run: buf generate
+
+      - name: Assert no diff in generated files
+        run: |
+          git diff --exit-code src/
+          if [ $? -ne 0 ]; then
+            echo "Generated stubs are out of date. Run 'make generate' and commit the result."
+            exit 1
+          fi

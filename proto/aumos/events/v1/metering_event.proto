@@ -1,6 +1,8 @@
 syntax = "proto3";
 package aumos.events.v1;
 
+option python_package = "aumos_proto.events.v1";
+
 message MeteringEvent {
   string event_id = 1;
   string tenant_id = 2;

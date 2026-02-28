@@ -1,0 +1,40 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+option python_package = "aumos_proto.events.v1";
+
+import "google/protobuf/timestamp.proto";
+
+// LockAcquiredEvent records when a distributed lock is successfully acquired.
+message LockAcquiredEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string lock_name = 3;
+  string lock_owner = 4;    // service instance that holds the lock
+  int32 ttl_seconds = 5;
+  string source_service = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// LockReleasedEvent records when a distributed lock is released.
+message LockReleasedEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string lock_name = 3;
+  string lock_owner = 4;
+  bool timed_out = 5;       // true if lock expired rather than being explicitly released
+  string source_service = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// LockContentionEvent records when a lock acquisition attempt fails.
+message LockContentionEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string lock_name = 3;
+  string requesting_owner = 4;
+  string current_owner = 5;
+  int32 wait_seconds = 6;
+  string source_service = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}

@@ -1,8 +1,37 @@
-version: v1
+version: v2
+inputs:
+  - directory: proto
 plugins:
-  - plugin: buf.build/protocolbuffers/python
-    out: src/aumos_proto
-    opt: paths=source_relative
-  - plugin: buf.build/grpc/python
-    out: src/aumos_proto
-    opt: paths=source_relative
+  # Primary: betterproto — generates @dataclass messages with proper type hints,
+  # real Protobuf binary encoding, and clean .to_dict() / .from_dict() methods.
+  # This matches the existing dataclass API surface (Gap 535).
+  - remote: buf.build/community/python-betterproto
+    out: src
+    opt:
+      - paths=source_relative
+
+  # Standard protoc-gen-python for broad tooling compatibility (DESCRIPTOR API).
+  - remote: buf.build/protocolbuffers/python
+    out: src
+    opt:
+      - paths=source_relative
+
+  # gRPC service stubs for future service-to-service calls.
+  - remote: buf.build/grpc/python
+    out: src
+    opt:
+      - paths=source_relative
+
+  # Go stubs for edge services and infrastructure components (Gap 540).
+  - remote: buf.build/protocolbuffers/go
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - module=github.com/muveraai/aumos-proto
+
+  # TypeScript stubs via protobuf-es for web frontends (Gap 540).
+  - remote: buf.build/bufbuild/es
+    out: gen/ts
+    opt:
+      - paths=source_relative
+      - target=ts

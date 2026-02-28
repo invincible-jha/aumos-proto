@@ -1,0 +1,31 @@
+syntax = "proto3";
+package aumos.events.v1;
+
+option python_package = "aumos_proto.events.v1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// FeatureFlagEvaluationEvent records every evaluation of a feature flag.
+message FeatureFlagEvaluationEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string flag_key = 3;
+  bool enabled = 4;
+  string evaluated_for = 5;  // user_id or team_id that triggered the evaluation
+  string source_service = 6;
+  google.protobuf.Struct context = 7;   // arbitrary evaluation context
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// FeatureFlagChangeEvent records updates to flag configuration.
+message FeatureFlagChangeEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string flag_key = 3;
+  bool previous_enabled = 4;
+  bool new_enabled = 5;
+  string changed_by = 6;
+  string change_reason = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}

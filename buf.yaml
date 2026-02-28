@@ -1,9 +1,21 @@
-version: v1
-name: aumos/aumos-proto
-deps: []
+version: v2
+modules:
+  - path: proto
+    name: buf.build/muveraai/aumos-proto
+deps:
+  - buf.build/googleapis/googleapis
 breaking:
   use:
     - FILE
 lint:
   use:
     - DEFAULT
+  except:
+    # Suppress comment-presence lint rules — implementation guides, not public API docs.
+    - COMMENT_ENUM
+    - COMMENT_ENUM_VALUE
+    - COMMENT_FIELD
+    - COMMENT_MESSAGE
+    - COMMENT_ONEOF
+    - COMMENT_RPC
+    - COMMENT_SERVICE

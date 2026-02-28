@@ -1,6 +1,8 @@
 syntax = "proto3";
 package aumos.events.v1;
 
+option python_package = "aumos_proto.events.v1";
+
 import "google/protobuf/timestamp.proto";
 
 message UsageMetricsEvent {

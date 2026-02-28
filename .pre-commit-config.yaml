@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: buf-lint
+        name: buf lint
+        description: Lint all .proto files with buf
+        language: system
+        files: '\.proto$'
+        entry: buf lint
+        pass_filenames: false
+
+      - id: buf-breaking
+        name: buf breaking change detection
+        description: Detect breaking changes in .proto files against main branch
+        language: system
+        files: '\.proto$'
+        entry: buf breaking --against '.git#branch=main,subdir=proto'
+        pass_filenames: false
